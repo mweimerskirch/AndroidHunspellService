@@ -13,7 +13,7 @@ import android.service.textservice.SpellCheckerService;
 import android.view.textservice.SuggestionsInfo;
 import android.view.textservice.TextInfo;
 
-public class SpellcheckerService extends SpellCheckerService {
+public class ExampleSpellcheckerService extends SpellCheckerService {
 	@Override
 	public Session createSession() {
 		return new AndroidSpellCheckerSession();
