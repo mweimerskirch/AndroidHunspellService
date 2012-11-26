@@ -1,0 +1,317 @@
+Index: base/allocator/type_profiler_control.h
+===================================================================
+--- jni/base/allocator/type_profiler_control.h	(revision 93)
++++ jni/base/allocator/type_profiler_control.h	(working copy)
+@@ -5,7 +5,7 @@
+ #ifndef BASE_ALLOCATOR_TYPE_PROFILER_CONTROL_H_
+ #define BASE_ALLOCATOR_TYPE_PROFILER_CONTROL_H_
+ 
+-#include "base/gtest_prod_util.h"
++// #include "base/gtest_prod_util.h"
+ 
+ namespace base {
+ namespace type_profiler {
+@@ -16,8 +16,8 @@
+   static bool IsProfiling();
+ 
+  private:
+-  FRIEND_TEST_ALL_PREFIXES(TypeProfilerTest,
+-                           TestProfileNewWithoutProfiledDelete);
++//   FRIEND_TEST_ALL_PREFIXES(TypeProfilerTest,
++//                            TestProfileNewWithoutProfiledDelete);
+ 
+   // It must be used only from allowed unit tests.  The following is only
+   // allowed for use in unit tests. Profiling should never be restarted in
+Index: base/gtest_prod_util.h
+===================================================================
+--- jni/base/gtest_prod_util.h	(revision 93)
++++ jni/base/gtest_prod_util.h	(working copy)
+@@ -5,7 +5,7 @@
+ #ifndef BASE_GTEST_PROD_UTIL_H_
+ #define BASE_GTEST_PROD_UTIL_H_
+ 
+-#include "testing/gtest/include/gtest/gtest_prod.h"
++// #include "testing/gtest/include/gtest/gtest_prod.h"
+ 
+ // This is a wrapper for gtest's FRIEND_TEST macro that friends
+ // test with all possible prefixes. This is very helpful when changing the test
+@@ -18,7 +18,7 @@
+ //   void MyMethod();
+ //   FRIEND_TEST_ALL_PREFIXES(MyClassTest, MyMethod);
+ // };
+-#define FRIEND_TEST_ALL_PREFIXES(test_case_name, test_name) \
++// #define FRIEND_TEST_ALL_PREFIXES(test_case_name, test_name) \
+   FRIEND_TEST(test_case_name, test_name); \
+   FRIEND_TEST(test_case_name, DISABLED_##test_name); \
+   FRIEND_TEST(test_case_name, FLAKY_##test_name); \
+Index: base/path_service.cc
+===================================================================
+--- jni/base/path_service.cc	(revision 91)
++++ jni/base/path_service.cc	(working copy)
+@@ -262,7 +262,7 @@
+ }
+ 
+ // static
+-bool PathService::RemoveOverride(int key) {
++/*bool PathService::RemoveOverride(int key) {
+   PathData* path_data = GetPathData();
+   DCHECK(path_data);
+ 
+@@ -278,7 +278,7 @@
+   path_data->overrides.erase(key);
+ 
+   return true;
+-}
++}*/
+ 
+ // static
+ void PathService::RegisterProvider(ProviderFunc func, int key_start,
+Index: base/path_service.h
+===================================================================
+--- jni/base/path_service.h	(revision 91)
++++ jni/base/path_service.h	(working copy)
+@@ -69,12 +69,12 @@
+ 
+  private:
+   friend class base::ScopedPathOverride;
+-  FRIEND_TEST_ALL_PREFIXES(PathServiceTest, RemoveOverride);
++//   FRIEND_TEST_ALL_PREFIXES(PathServiceTest, RemoveOverride);
+ 
+   // Removes an override for a special directory or file. Returns true if there
+   // was an override to remove or false if none was present.
+   // NOTE: This function is intended to be used by tests only!
+-  static bool RemoveOverride(int key);
++//   static bool RemoveOverride(int key);
+ };
+ 
+ #endif  // BASE_PATH_SERVICE_H_
+Index: base/logging.cc
+===================================================================
+--- jni/base/logging.cc	(revision 94)
++++ jni/base/logging.cc	(working copy)
+@@ -60,7 +60,7 @@
+ #endif
+ 
+ #if defined(OS_ANDROID)
+-#include <android/log.h>
++//#include <android/log.h>
+ #endif
+ 
+ namespace logging {
+@@ -581,23 +581,23 @@
+ #if defined(OS_WIN)
+     OutputDebugStringA(str_newline.c_str());
+ #elif defined(OS_ANDROID)
+-    android_LogPriority priority = ANDROID_LOG_UNKNOWN;
+-    switch (severity_) {
+-      case LOG_INFO:
+-        priority = ANDROID_LOG_INFO;
+-        break;
+-      case LOG_WARNING:
+-        priority = ANDROID_LOG_WARN;
+-        break;
+-      case LOG_ERROR:
+-      case LOG_ERROR_REPORT:
+-        priority = ANDROID_LOG_ERROR;
+-        break;
+-      case LOG_FATAL:
+-        priority = ANDROID_LOG_FATAL;
+-        break;
+-    }
+-    __android_log_write(priority, "chromium", str_newline.c_str());
++//     android_LogPriority priority = ANDROID_LOG_UNKNOWN;
++//     switch (severity_) {
++//       case LOG_INFO:
++//         priority = ANDROID_LOG_INFO;
++//         break;
++//       case LOG_WARNING:
++//         priority = ANDROID_LOG_WARN;
++//         break;
++//       case LOG_ERROR:
++//       case LOG_ERROR_REPORT:
++//         priority = ANDROID_LOG_ERROR;
++//         break;
++//       case LOG_FATAL:
++//         priority = ANDROID_LOG_FATAL;
++//         break;
++//     }
++//     __android_log_write(priority, "chromium", str_newline.c_str());
+ #endif
+     fprintf(stderr, "%s", str_newline.c_str());
+     fflush(stderr);
+Index: base/hash_tables.h
+===================================================================
+--- jni/base/hash_tables.h
++++ jni/base/hash_tables.h
+@@ -33,7 +33,7 @@
+ 
+ #elif defined(COMPILER_GCC)
+ #if defined(OS_ANDROID)
+-#define BASE_HASH_NAMESPACE std
++#define BASE_HASH_NAMESPACE __gnu_cxx
+ #else
+ #define BASE_HASH_NAMESPACE __gnu_cxx
+ #endif
+@@ -47,8 +47,8 @@
+ #endif
+ 
+ #if defined(OS_ANDROID)
+-#include <hash_map>
+-#include <hash_set>
++#include <ext/hash_map>
++#include <ext/hash_set>
+ #else
+ #include <ext/hash_map>
+ #include <ext/hash_set>
+Index: base/time.cc
+===================================================================
+--- jni/base/time.cc	(revision 80)
++++ jni/base/time.cc	(working copy)
+@@ -12,7 +12,7 @@
+ #include <limits>
+ 
+ #include "base/sys_string_conversions.h"
+-#include "base/third_party/nspr/prtime.h"
++//#include "base/third_party/nspr/prtime.h"
+ 
+ #include "base/logging.h"
+
+@@ -157,7 +157,7 @@
+ }
+ 
+ // static
+-bool Time::FromStringInternal(const char* time_string,
++/*bool Time::FromStringInternal(const char* time_string,
+                               bool is_local,
+                               Time* parsed_time) {
+   DCHECK((time_string != NULL) && (parsed_time != NULL));
+@@ -175,7 +175,7 @@
+   result_time += kTimeTToMicrosecondsOffset;
+   *parsed_time = Time(result_time);
+   return true;
+-}
++}*/
+ 
+ // Time::Exploded -------------------------------------------------------------
+
+Index: base/third_party/dynamic_annotations/dynamic_annotations.c
+===================================================================
+--- jni/base/third_party/dynamic_annotations/dynamic_annotations.c	(revision 80)
++++ jni/base/third_party/dynamic_annotations/dynamic_annotations.c	(working copy)
+@@ -39,7 +39,7 @@
+ 
+ #ifdef __GNUC__
+ /* valgrind.h uses gcc extensions so it won't build with other compilers */
+-# include "base/third_party/valgrind/valgrind.h"
++//# include "base/third_party/valgrind/valgrind.h"
+ #endif
+ 
+ /* Compiler-based ThreadSanitizer defines
+Index: base/tracked_objects.cc
+===================================================================
+--- jni/base/tracked_objects.cc	(revision 80)
++++ jni/base/tracked_objects.cc	(working copy)
+@@ -12,7 +12,7 @@
+ #include "base/process_util.h"
+ #include "base/profiler/alternate_timer.h"
+ #include "base/stringprintf.h"
+-#include "base/third_party/valgrind/memcheck.h"
++//#include "base/third_party/valgrind/memcheck.h"
+ #include "base/threading/thread_restrictions.h"
+ #include "base/port.h"
+ 
+@@ -258,8 +258,8 @@
+ 
+ void ThreadData::PushToHeadOfList() {
+   // Toss in a hint of randomness (atop the uniniitalized value).
+-  (void)VALGRIND_MAKE_MEM_DEFINED_IF_ADDRESSABLE(&random_number_,
+-                                                 sizeof(random_number_));
++  //(void)VALGRIND_MAKE_MEM_DEFINED_IF_ADDRESSABLE(&random_number_,
++  //                                               sizeof(random_number_));
+   random_number_ += static_cast<int32>(this - static_cast<ThreadData*>(0));
+   random_number_ ^= (Now() - TrackedTime()).InMilliseconds();
+
+Index: base/file_path.cc
+===================================================================
+--- jni/base/file_path.cc	(revision 80)
++++ jni/base/file_path.cc	(working copy)
+@@ -9,7 +9,7 @@
+ 
+ #include "base/basictypes.h"
+ #include "base/logging.h"
+-#include "base/pickle.h"
++// #include "base/pickle.h"
+ 
+ // These includes are just for the *Hack functions, and should be removed
+ // when those functions are removed.
+@@ -589,7 +589,7 @@
+ }
+ #endif
+ 
+-void FilePath::WriteToPickle(Pickle* pickle) {
++/*void FilePath::WriteToPickle(Pickle* pickle) {
+ #if defined(OS_WIN)
+   pickle->WriteString16(path_);
+ #else
+@@ -607,7 +607,7 @@
+ #endif
+ 
+   return true;
+-}
++}*/
+ 
+ #if defined(OS_WIN)
+ // Windows specific implementation of file string comparisons
+Index: base/file_path.h
+===================================================================
+--- jni/base/file_path.h	(revision 80)
++++ jni/base/file_path.h	(working copy)
+@@ -120,8 +120,8 @@
+ #define FILE_PATH_USES_WIN_SEPARATORS
+ #endif  // OS_WIN
+ 
+-class Pickle;
+-class PickleIterator;
++// class Pickle;
++// class PickleIterator;
+ 
+ // An abstraction to isolate users from the differences between native
+ // pathnames on different platforms.
+@@ -343,8 +343,8 @@
+   // AsUTF8Unsafe() for details.
+   static FilePath FromUTF8Unsafe(const std::string& utf8);
+ 
+-  void WriteToPickle(Pickle* pickle);
+-  bool ReadFromPickle(PickleIterator* iter);
++//   void WriteToPickle(Pickle* pickle);
++//   bool ReadFromPickle(PickleIterator* iter);
+ 
+   // Normalize all path separators to backslash on Windows
+   // (if FILE_PATH_USES_WIN_SEPARATORS is true), or do nothing on POSIX systems.
+Index: base/tracked_objects.h
+===================================================================
+--- jni/base/tracked_objects.h	(revision 80)
++++ jni/base/tracked_objects.h	(working copy)
+@@ -13,7 +13,7 @@
+ #include <vector>
+ 
+ #include "base/base_export.h"
+-#include "base/gtest_prod_util.h"
++//#include "base/gtest_prod_util.h"
+ #include "base/lazy_instance.h"
+ #include "base/location.h"
+ #include "base/profiler/alternate_timer.h"
+@@ -487,10 +487,10 @@
+   // TODO(jar): Make this a friend in DEBUG only, so that the optimizer has a
+   // better change of optimizing (inlining? etc.) private methods (knowing that
+   // there will be no need for an external entry point).
+-  friend class TrackedObjectsTest;
+-  FRIEND_TEST_ALL_PREFIXES(TrackedObjectsTest, MinimalStartupShutdown);
+-  FRIEND_TEST_ALL_PREFIXES(TrackedObjectsTest, TinyStartupShutdown);
+-  FRIEND_TEST_ALL_PREFIXES(TrackedObjectsTest, ParentChildTest);
++//   friend class TrackedObjectsTest;
++//   FRIEND_TEST_ALL_PREFIXES(TrackedObjectsTest, MinimalStartupShutdown);
++//   FRIEND_TEST_ALL_PREFIXES(TrackedObjectsTest, TinyStartupShutdown);
++//   FRIEND_TEST_ALL_PREFIXES(TrackedObjectsTest, ParentChildTest);
+ 
+   typedef std::map<const BirthOnThread*, int> BirthCountMap;

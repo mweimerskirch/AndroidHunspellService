@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.example.android.samplespellcheckerservice"
+	android:windowSoftInputMode="adjustPan"
+	android:versionName="1.0"
+	android:versionCode="1"
+	>
+
+	<supports-screens
+		android:anyDensity="true"
+		android:smallScreens="true"
+		android:normalScreens="true"
+		android:largeScreens="true"
+		android:xlargeScreens="true"
+		android:resizeable="true" />
+
+	<uses-sdk android:minSdkVersion="14" android:targetSdkVersion="17" />
+
+	<application
+		android:label="@string/app_name"
+		android:allowBackup="false"
+	>
+
+		<service
+			android:name=".SpellcheckerService"
+			android:label="@string/app_name"
+			android:permission="android.permission.BIND_TEXT_SERVICE" >
+			<intent-filter>
+				<action android:name="android.service.textservice.SpellCheckerService" />
+			</intent-filter>
+
+			<meta-data
+				android:name="android.view.textservice.scs"
+				android:resource="@xml/spellchecker" />
+		</service>
+	</application>
+
+</manifest>
