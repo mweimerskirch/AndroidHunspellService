@@ -59,7 +59,11 @@ Hunspell::Hunspell(const char * affpath, const char * dpath, const char * key)
     wordbreak = pAMgr->get_breaktable();
 
     /* and finally set up the suggestion manager */
+#ifdef HUNSPELL_CHROME_CLIENT
+    pSMgr = new SuggestMgr(bdict_reader, try_string, MAXSUGGESTION, pAMgr);
+#else
     pSMgr = new SuggestMgr(try_string, MAXSUGGESTION, pAMgr);
+#endif
     if (try_string) free(try_string);
 }
 
