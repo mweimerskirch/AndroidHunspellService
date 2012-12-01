@@ -11,6 +11,6 @@ License information
 FAQ
 
 * To compile the native library: /path/to/android-ndk-r8b/ndk-build LOCAL_USE_LTO=true
-* Unfortunately, this doesn't run on many Samsung phones, because the removed the spell checking function from their Android version. I contacted them but didn't get a useful answer.
+* Unfortunately, this doesn't run on many Samsung phones, because they removed the spell checking function from their Android version. I contacted them but didn't get a useful answer.
 
 For a similar project using the original Hunspell code, check https://github.com/iwo/HunspellCheckerService
