@@ -324,6 +324,12 @@ int HashMgr::get_clen_and_captype(const char * word, int wbl, int * captype) {
 // remove word (personal dictionary function for standalone applications)
 int HashMgr::remove(const char * word)
 {
+#ifdef HUNSPELL_CHROME_CLIENT
+    std::map<base::StringPiece, int>::iterator iter =
+        custom_word_to_affix_id_map_.find(word);
+    if (iter != custom_word_to_affix_id_map_.end())
+        custom_word_to_affix_id_map_.erase(iter);
+#else
     struct hentry * dp = lookup(word);
     while (dp) {
         if (dp->alen == 0 || !TESTAFF(dp->astr, forbiddenword, dp->alen)) {
@@ -338,6 +344,7 @@ int HashMgr::remove(const char * word)
         }
         dp = dp->next_homonym;
     }
+#endif
     return 0;
 }
 

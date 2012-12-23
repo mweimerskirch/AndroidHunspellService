@@ -137,7 +137,9 @@ int Hunspell::cleanword2(char * dest, const char * src,
    if (utf8) {
       *nc = u8_u16(dest_utf, MAXWORDLEN, dest);
       // don't check too long words
-      if (*nc >= MAXWORDLEN) return 0;
+      // TODO(rouslan): Remove the interim change below when this patch lands:
+      // http://sf.net/tracker/?func=detail&aid=3595024&group_id=143754&atid=756395.
+      if (*nc >= MAXWORDLEN - 1) return 0;
       if (*nc == -1) { // big Unicode character (non BMP area)
          *pcaptype = NOCAP;
          return nl;
